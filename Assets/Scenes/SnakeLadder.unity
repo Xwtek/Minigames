@@ -740,7 +740,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 1
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -764,7 +764,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 134140643}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -2.009}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1616,6 +1616,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8541173163346213342, guid: 126238e1204499e77ac258c6a93c2de4, type: 3}
   m_PrefabInstance: {fileID: 307627756}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &311250478
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 990343765693688514, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+      propertyPath: m_Name
+      value: DiceContainer 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 990343765693688524, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 990343765693688524, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 990343765693688524, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 990343765693688524, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 990343765693688524, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 990343765693688524, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 990343765693688524, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 990343765693688524, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 990343765693688524, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 990343765693688524, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 990343765693688524, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
 --- !u!1001 &386382981
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5346,11 +5403,11 @@ Transform:
   m_GameObject: {fileID: 1373856478}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1}
-  m_LocalScale: {x: 3.3333333, y: 3.3333333, z: 1}
+  m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 1}
   m_Children:
   - {fileID: 246036105}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1383217746
 PrefabInstance:
@@ -7594,7 +7651,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2114643443
 MonoBehaviour:
@@ -7610,7 +7667,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tokenPrefab: {fileID: 4522680477237777467, guid: d1b149502f1682a03a92e42b8a843fd3, type: 3}
   tokenStorage: {fileID: 1373856480}
-  distance: 0.25
+  distance: 0.3
   timePerBox: 0.5
 --- !u!114 &2114643444
 MonoBehaviour:

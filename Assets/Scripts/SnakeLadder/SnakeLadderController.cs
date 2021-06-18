@@ -17,9 +17,13 @@ namespace SnakeLadder
         public float distance;
         public float timePerBox;
         AnimationState animationState;
+        public bool focus = true;
         private void Update()
         {
             NextTurn();
+            if(focus){
+
+            }
         }
         public void PlayNewGame(Player[] players, (int, int)[] traps, bool takeback)
         {

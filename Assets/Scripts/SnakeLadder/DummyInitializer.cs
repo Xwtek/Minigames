@@ -15,7 +15,10 @@ namespace SnakeLadder
         {
             if (!initialized)
             {
-                controller.PlayNewGame(players, new (int, int)[0], true);
+                controller.PlayNewGame(players, new (int, int)[]{
+                    (7, 14), (21, 28), (35, 42), (49, 56), (63, 70), (77, 84),
+                    (12, 6), (24, 18), (36, 30), (60, 54), (72, 66), (96, 90)
+                }, true);
                 initialized = true;
             }
         }

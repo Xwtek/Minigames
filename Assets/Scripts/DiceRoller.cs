@@ -17,27 +17,20 @@ public class DiceRoller : MonoBehaviour
     private MeshRenderer mr;
     private Transform tr;
     public List<Vector3> sides;
-    public List<(float3, Quaternion)> record = new List<(float3, Quaternion)>();
     public float minForce;
     public float maxForce;
     public float3 cubeDimension;
-    private bool recording = false;
-    private int? rerun = null;
-    private Quaternion? target = null;
-    public bool Running => recording || rerun.HasValue;
-    public int currResult = 0;
     private Camera mainCamera;
-    public bool Failed { get; private set; } = false;
     public bool ShowDice {
         get => mr.enabled;
         set => mr.enabled = value;
     }
+    public bool cancel = false;
+    public bool finished = true;
+    public RecordedAnimation recordedPath = null;
     public void Roll(){
-        if(recording) throw new DiceException(DiceFailure.IsRecording);
-        if(rerun.HasValue) throw new DiceException(DiceFailure.IsReplaying);
-        record.Clear();
-        Failed = false;
-        recording = true;
+        if(!finished) throw new DiceException(DiceFailure.IsRecording);
+        StartCoroutine(Recording());
     }
     /// <summary>
     /// Get A random horizontal force
@@ -64,61 +57,81 @@ public class DiceRoller : MonoBehaviour
         var cameraCoord = mainCamera.WorldToViewportPoint(rb.position);
         return cameraCoord.x >= 0 && cameraCoord.y >= 0 && cameraCoord.z >= 0 && cameraCoord.x <= 1 && cameraCoord.y <= 1;
     }
-    private void FixedUpdate(){
-        if (recording)
+    /// <summary>
+    /// Rerun the dice roll, ensuring that the dice end up with the desired side
+    /// </summary>
+    /// <param name="target">The desired dice</param>
+    public void Rerun(RecordedAnimation path, int target){
+        var targetRotation = Quaternion.FromToRotation(sides[target], sides[path.resultFace]);
+        if(!finished) throw new DiceException(DiceFailure.IsRecording);
+        StartCoroutine(Rerolling(path, targetRotation));
+    }
+    private IEnumerator Recording()
+    {
+        recordedPath = null;
+        var recorded = new RecordedAnimation();
+        cancel = false;
+        finished = false;
+        yield return new WaitForFixedUpdate();
+        tr.SetPositionAndRotation(Vector3.back, Random.rotationUniform);
+        rb.AddForceAtPosition(RandomForce(), RandomInCube(rb.position, cubeDimension, rb.rotation), ForceMode.Impulse);
+        while (true)
         {
-            if (record.Count == 0)
+            recorded.Record(rb.position, rb.rotation);
+            if (!IsOnscreen())
             {
-                tr.SetPositionAndRotation(Vector3.back, Random.rotationUniform);
-                rb.AddForceAtPosition(RandomForce(), RandomInCube(rb.position, cubeDimension, rb.rotation), ForceMode.Impulse);
-            }
-            
-            record.Add((rb.position, rb.rotation));
-            if(!IsOnscreen()){
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
-                recording = false;
-                Failed = true;
-                record.Clear();
+                recordedPath = null;
+                break;
             }
-            if (Mathf.Approximately(0, rb.angularVelocity.sqrMagnitude + rb.velocity.sqrMagnitude) && record.Count > 2)
+            if (Mathf.Approximately(0, rb.angularVelocity.sqrMagnitude + rb.velocity.sqrMagnitude) && recorded.recording.Count > 2)
             {
-                recording = false;
                 var rot = rb.rotation;
                 var successful = false;
                 for (var i = 0; i < 6; i++)
                 {
                     if (rb.rotation * sides[i] == Vector3.back)
                     {
-                        currResult = i;
+                        recorded.resultFace = i;
                         successful = true;
                         break;
                     }
                 }
-                Failed |= !successful;
-                if(Failed) record.Clear();
-                Debug.Log(currResult);
+                recordedPath = successful ? recorded : null;
+                break;
             }
-        }else if(rerun.HasValue){
-            var (position, rotation) = record[rerun.Value];
-            tr.SetPositionAndRotation(position, rotation*target.Value);
-            rerun++;
-            if (rerun == record.Count)
-            {
-                rerun = null;
-                target = null;
+            if(cancel){
+                recordedPath = null;
+                break;
             }
+            yield return new WaitForFixedUpdate();
         }
+        finished = true;
     }
-    /// <summary>
-    /// Rerun the dice roll, ensuring that the dice end up with the desired side
-    /// </summary>
-    /// <param name="target">The desired dice</param>
-    public void Rerun(int target){
-        if(Running) throw new DiceException(DiceFailure.IsRecording);
-        if(record.Count == 0) throw new DiceException(DiceFailure.NoRecord);
-        if(this.rerun.HasValue) throw new DiceException(DiceFailure.IsReplaying);
-        rerun = 0;
-        this.target = Quaternion.FromToRotation(sides[target], sides[currResult]);
+    private IEnumerator Rerolling(RecordedAnimation path, Quaternion target)
+    {
+        cancel = false;
+        finished = false;
+        recordedPath = null;
+        yield return new WaitForFixedUpdate();
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        foreach(var (position, rotation) in path.recording){
+            tr.SetPositionAndRotation(position, rotation*target);
+            if(cancel) goto ends;
+            yield return new WaitForFixedUpdate();
+        }
+        ends:
+        finished = true;
     }
+}
+[System.Serializable]
+public class RecordedAnimation{
+    public List<(Vector3, Quaternion)> recording = new List<(Vector3, Quaternion)>();
+    public int resultFace;
+    public void Record(Vector3 position, Quaternion rotation){
+        recording.Add((position, rotation));
+    }
+    public void Record(Transform transform) => Record(transform.position, transform.rotation);
 }

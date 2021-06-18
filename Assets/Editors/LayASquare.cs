@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 using SnakeLadder;
@@ -16,3 +17,4 @@ public class LayASquare{
         }
     }
 }
+#endif

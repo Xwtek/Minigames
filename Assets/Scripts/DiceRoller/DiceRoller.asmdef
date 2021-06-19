@@ -1,10 +1,8 @@
 {
-    "name": "SnakeLadder",
+    "name": "DiceRoller",
     "rootNamespace": "",
     "references": [
-        "GUID:d8b63aba1907145bea998dd612889d6b",
-        "GUID:02d646cee11bea4a69338234fec43309",
-        "GUID:1a49f799598f11299a401fac02504f31"
+        "GUID:d8b63aba1907145bea998dd612889d6b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

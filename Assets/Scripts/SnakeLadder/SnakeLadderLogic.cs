@@ -31,8 +31,6 @@ public class SnakeLadderLogic{
             yield return new TokenMovement { target = trap.Value, final = true };
             playerPos[currentPlayer] = trap.Value;
         }
-        currentPlayer++;
-        if(currentPlayer == playerPos.Length) currentPlayer = 0;
     }
     int? TrapLeadsInto(int place){
         for (int i = 0; i < traps.Length; i++){
@@ -68,6 +66,10 @@ public class SnakeLadderLogic{
             if((lower & mask)>0) throw new ArgumentException("Cannot use this box because it has been used for earlier traps", indication);
             lower |= mask;
         }
+    }
+    public void NextPlayer(){
+        currentPlayer++;
+        if(currentPlayer == playerPos.Length) currentPlayer = 0;
     }
 } 
 public struct MoveResult {

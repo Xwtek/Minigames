@@ -10,7 +10,7 @@ namespace SnakeLadder
     public class SnakeLadderController : MonoBehaviour
     {
         SnakeLadderLogic logic;
-        Token[] tokens;
+        public Token[] tokens;
         MoveResult? currAnim;
         public GameObject tokenPrefab;
         public Transform tokenStorage;
@@ -18,17 +18,16 @@ namespace SnakeLadder
         public float timePerBox;
         AnimationState animationState;
         public bool focus = true;
+        public int currentPlayer => logic.currentPlayer;
+        public int playerCount => tokens.Length;
         private void Update()
         {
-            NextTurn();
-            if(focus){
-
-            }
         }
         public void PlayNewGame(Player[] players, (int, int)[] traps, bool takeback)
         {
             logic = new SnakeLadderLogic(players.Length, traps, takeback);
             currAnim = null;
+            finished = true;
             tokens = players.Select((player, index) => PlaceToken(player.name, player.image, index)).ToArray();
         }
         private Token PlaceToken(string name, Texture2D image, int index){
@@ -73,14 +72,17 @@ namespace SnakeLadder
                 }
             }
         }
-        private void NextTurn(){
-            if(coroutineRunning || logic == null) return;
-            StartCoroutine(TokenCoroutine(new int2(Random.Range(1,7), Random.Range(1,7))));
+        public void NextTurn(int2 roll){
+            if(!finished || logic == null) return;
+            StartCoroutine(TokenCoroutine(roll));
+        }
+        public void NextPlayer(){
+            logic.NextPlayer();
         }
         private IEnumerator TokenCoroutine(int2 diceroll)
         {
             cancelCoroutine = false;
-            coroutineRunning = true;
+            finished = false;
             foreach (var movement in logic.Roll(diceroll))
             {
                 while (IsMoving)
@@ -88,7 +90,7 @@ namespace SnakeLadder
                     if (cancelCoroutine)
                     {
 
-                        coroutineRunning = false;
+                        finished = true;
                         yield break;
                     }
                     else
@@ -102,7 +104,7 @@ namespace SnakeLadder
             {
                 if (cancelCoroutine)
                 {
-                    coroutineRunning = false;
+                    finished = true;
                     yield break;
                 }
                 else
@@ -110,9 +112,9 @@ namespace SnakeLadder
                     yield return null;
                 }
             }
-            coroutineRunning = false;
+            finished = true;
         }
-        bool coroutineRunning = false;
+        public bool finished = true;
         bool cancelCoroutine = false;
         private bool IsMoving => tokens.Any((token) => token.IsMoving);
         enum AnimationState{

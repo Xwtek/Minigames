@@ -4,33 +4,33 @@ namespace DiceRoller
 {
 
 
-    public class DiceRollerInput : MonoBehaviour
+public class DiceRollerInput : MonoBehaviour
+{
+    public DiceManager manager;
+    List<int> prevInputs = new List<int>();
+    private static List<KeyCode> targets = new List<KeyCode>{
+    KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5, KeyCode.Alpha6
+};
+    void Update()
     {
-        public DiceRollerManager manager;
-        List<int> prevInputs = new List<int>();
-        private static List<KeyCode> targets = new List<KeyCode>{
-        KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5, KeyCode.Alpha6
-    };
-        void Update()
-        {
 
-            if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            manager.Record();
+        }
+        for (var i = 0; i < 6; i++)
+        {
+            if (Input.GetKeyDown(targets[i]))
             {
-                manager.Record();
-            }
-            for (var i = 0; i < 6; i++)
-            {
-                if (Input.GetKeyDown(targets[i]))
+                prevInputs.Add(i);
+                if (prevInputs.Count == manager.dices.Length)
                 {
-                    prevInputs.Add(i);
-                    if (prevInputs.Count == manager.dices.Length)
-                    {
-                        manager.Roll(prevInputs.ToArray());
-                        prevInputs.Clear();
-                    }
-                    break;
+                    manager.Roll(prevInputs.ToArray());
+                    prevInputs.Clear();
                 }
+                break;
             }
         }
     }
+}
 }

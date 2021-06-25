@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
 using Random = UnityEngine.Random;
+using System;
 namespace DiceRoller
 {
     public class Dice : MonoBehaviour
@@ -30,10 +31,10 @@ namespace DiceRoller
         }
         public bool cancel = false;
         public bool finished = true;
-        public RecordedAnimation recordedPath = null;
-        public void Roll()
+        public RecordedAnimation recordedAnimation = null;
+        public void Record()
         {
-            if (!finished) throw new DiceException(DiceFailure.IsRecording);
+            if (!finished) throw new InvalidOperationException("Cannot record an animation because the dice is still busy");
             StartCoroutine(Recording());
         }
         /// <summary>
@@ -67,15 +68,19 @@ namespace DiceRoller
         /// Rerun the dice roll, ensuring that the dice end up with the desired side
         /// </summary>
         /// <param name="target">The desired dice</param>
-        public void Rerun(RecordedAnimation path, int target)
+        public void Reroll(RecordedAnimation path, int target)
         {
             var targetRotation = Quaternion.FromToRotation(sides[target], sides[path.resultFace]);
-            if (!finished) throw new DiceException(DiceFailure.IsRecording);
+            if (!finished) throw new InvalidOperationException("Cannot record an animation because the dice is still busy");
             StartCoroutine(Rerolling(path, targetRotation));
         }
+        /// <summary>
+        /// Coroutine that runs while recording the animation
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator Recording()
         {
-            recordedPath = null;
+            recordedAnimation = null;
             var recorded = new RecordedAnimation();
             cancel = false;
             finished = false;
@@ -89,7 +94,7 @@ namespace DiceRoller
                 {
                     rb.velocity = Vector3.zero;
                     rb.angularVelocity = Vector3.zero;
-                    recordedPath = null;
+                    recordedAnimation = null;
                     break;
                 }
                 if (Mathf.Approximately(0, rb.angularVelocity.sqrMagnitude + rb.velocity.sqrMagnitude) && recorded.recording.Count > 2)
@@ -105,12 +110,12 @@ namespace DiceRoller
                             break;
                         }
                     }
-                    recordedPath = successful ? recorded : null;
+                    recordedAnimation = successful ? recorded : null;
                     break;
                 }
                 if (cancel)
                 {
-                    recordedPath = null;
+                    recordedAnimation = null;
                     break;
                 }
                 yield return new WaitForFixedUpdate();
@@ -121,7 +126,7 @@ namespace DiceRoller
         {
             cancel = false;
             finished = false;
-            recordedPath = null;
+            recordedAnimation = null;
             yield return new WaitForFixedUpdate();
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
@@ -134,16 +139,5 @@ namespace DiceRoller
         ends:
             finished = true;
         }
-    }
-    [System.Serializable]
-    public class RecordedAnimation
-    {
-        public List<(Vector3, Quaternion)> recording = new List<(Vector3, Quaternion)>();
-        public int resultFace;
-        public void Record(Vector3 position, Quaternion rotation)
-        {
-            recording.Add((position, rotation));
-        }
-        public void Record(Transform transform) => Record(transform.position, transform.rotation);
     }
 }

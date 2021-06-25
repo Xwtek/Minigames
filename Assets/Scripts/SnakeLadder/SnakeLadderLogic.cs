@@ -17,12 +17,14 @@ public class SnakeLadderLogic{
         while(offset > 1){
             offset--;
             if(currPos == 99) moveBy = -1;
+            if(moveBy == -1 && !takeback) yield break;
             currPos += moveBy;
             if(currPos == 100) Debug.Log("No!");
             yield return new TokenMovement { target = currPos, final = false };
             playerPos[currentPlayer] = currPos;
         }
         if(currPos == 99) moveBy = -1;
+        if(moveBy == -1 && !takeback) yield break;
         currPos += moveBy;
         var trap = TrapLeadsInto(currPos);
         yield return new TokenMovement { target = currPos, final = !trap.HasValue };
@@ -71,12 +73,6 @@ public class SnakeLadderLogic{
         currentPlayer++;
         if(currentPlayer == playerPos.Length) currentPlayer = 0;
     }
-} 
-public struct MoveResult {
-    public int origin;
-    public int target;
-    public int takeback;
-    public int afterTrap;
 }
 public struct TokenMovement{
     public int target;

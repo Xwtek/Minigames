@@ -3241,6 +3241,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8541173163346213342, guid: 126238e1204499e77ac258c6a93c2de4, type: 3}
   m_PrefabInstance: {fileID: 919826741}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &947953422 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 990343765693688515, guid: 9d841f4845a46f19c96f2281e5057c86, type: 3}
+  m_PrefabInstance: {fileID: 311250478}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc493ef998c79a6a4bf1055aede787ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &955511893
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5385,7 +5396,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1373856478}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c09295c6ba9c5422dba7f02e7390155c, type: 3}
+  m_Script: {fileID: 11500000, guid: 29614d24b2385cd03a3a1418a3c86051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   center:
@@ -7632,6 +7643,8 @@ GameObject:
   - component: {fileID: 2114643442}
   - component: {fileID: 2114643443}
   - component: {fileID: 2114643444}
+  - component: {fileID: 2114643441}
+  - component: {fileID: 2114643445}
   m_Layer: 0
   m_Name: Global
   m_TagString: Untagged
@@ -7639,6 +7652,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &2114643441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114643440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61aec7e92f8081f85adb891cded2f309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoomer: {fileID: 1373856479}
+  focusOn: {fileID: 0}
 --- !u!4 &2114643442
 Transform:
   m_ObjectHideFlags: 0
@@ -7665,10 +7692,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79ef55b463d9226f951c9a3244c06fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tokens: []
   tokenPrefab: {fileID: 4522680477237777467, guid: d1b149502f1682a03a92e42b8a843fd3, type: 3}
   tokenStorage: {fileID: 1373856480}
   distance: 0.3
-  timePerBox: 0.5
+  timePerBox: 0
+  finished: 0
 --- !u!114 &2114643444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7686,7 +7715,24 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4f5050c3e85f77552a3917bf22ffb0ef, type: 2}
   - {fileID: 11400000, guid: 1f570b453a426c04da93a8b297f0363e, type: 2}
   - {fileID: 11400000, guid: 87d463322e1505913a8558bd15c23462, type: 2}
+  controller: {fileID: 0}
+--- !u!114 &2114643445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114643440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6919db841ef7f66823dfe6670179b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   controller: {fileID: 2114643443}
+  slCamera: {fileID: 2114643441}
+  roller: {fileID: 947953422}
+  playerIndex: 0
+  waitTime: 1
 --- !u!1001 &2131945894
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ namespace SnakeLadder
             var texture = new Texture2D(2,2);
             var bytes = System.IO.File.ReadAllBytes(url);
             texture.LoadImage(bytes);
-            target.texture = texture;
+            target.image = texture;
         }
     }
 }

@@ -7696,7 +7696,7 @@ MonoBehaviour:
   tokenPrefab: {fileID: 4522680477237777467, guid: d1b149502f1682a03a92e42b8a843fd3, type: 3}
   tokenStorage: {fileID: 1373856480}
   distance: 0.3
-  timePerBox: 0
+  timePerBox: 1
   finished: 0
 --- !u!114 &2114643444
 MonoBehaviour:
